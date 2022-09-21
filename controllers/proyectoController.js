@@ -31,7 +31,7 @@ exports.obtenerProyectos = async (req,res)=>{
         const proyectos= await Proyecto.find({creador:req.usuario.id})
         res.json({proyectos})
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).send("Hubo un error")
     }
 
@@ -87,9 +87,10 @@ exports.actualizaProyecto = async(req,res)=>{
 exports.eliminarProyecto = async (req,res)=>{
     try {
      //revisar el id
-        console.log("ID:"+req.params.id);
+        console.log("ELIMINANDO ID:"+req.params.id);
         //consulta a DB
         let proyecto = await Proyecto.findById(req.params.id);
+        const id=req.params.id.trim() 
 
         //si el proyecto existe o no
         if (!proyecto) {
@@ -100,7 +101,7 @@ exports.eliminarProyecto = async (req,res)=>{
             return res.status(401).json({msg:"No autorizado!"})
         }  
         
-        await Proyecto.findOneAndRemove({_Id:req.params.id})
+        await Proyecto.findByIdAndDelete(id)
         res.json({msg:"Proyecto eliminado con exito"})
 
     } catch (error) {
